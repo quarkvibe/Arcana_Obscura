@@ -1,0 +1,167 @@
+.tarot-card {
+  width: 180px;
+  height: 300px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin: 10px;
+  position: relative;
+  transition: transform 0.5s ease, box-shadow 0.3s ease;
+}
+
+.tarot-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.back-facing .card-inner {
+  transform: rotateY(180deg);
+}
+
+.revealed .card-inner {
+  transform: rotateY(0deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-front {
+  background-color: var(--color-parchment);
+  color: var(--color-black);
+  padding: 10px;
+  transform: rotateY(180deg);
+}
+
+.revealed .card-front {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  background-color: var(--color-burgundy);
+  border: 4px solid var(--color-gold);
+}
+
+.card-back-design {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-burgundy);
+  overflow: hidden;
+}
+
+.card-back-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.reversed {
+  transform: rotate(180deg);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-gold);
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  color: var(--color-burgundy);
+  margin: 0;
+}
+
+.card-arcana {
+  font-size: 0.7rem;
+  color: var(--color-burgundy);
+  opacity: 0.7;
+}
+
+.card-image-container {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 5px;
+  position: relative;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-position {
+  text-align: center;
+  padding: 8px 0;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--color-burgundy);
+}
+
+.card-meaning {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(26, 17, 16, 0.9);
+  color: var(--color-parchment);
+  padding: 10px;
+  font-size: 0.75rem;
+  max-height: 50%;
+  overflow-y: auto;
+  transform: translateY(100%);
+  animation: slideUp 0.3s forwards;
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .tarot-card {
+    width: 140px;
+    height: 230px;
+    margin: 5px;
+  }
+  
+  .card-title {
+    font-size: 0.8rem;
+  }
+  
+  .card-arcana {
+    font-size: 0.6rem;
+  }
+  
+  .card-position {
+    font-size: 0.7rem;
+  }
+  
+  .card-meaning {
+    font-size: 0.65rem;
+    padding: 8px;
+  }
+}
