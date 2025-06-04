@@ -3,6 +3,7 @@ import { useTarot } from '../context/TarotContext';
 import TarotCard from '../components/tarot/TarotCard';
 import SpreadSelector from '../components/tarot/SpreadSelector';
 import CardSpread from '../components/tarot/CardSpread';
+import { generateSpreadInterpretation } from '../lib/api-client';
 import './ReadingRoom.css';
 
 const ReadingRoom = () => {
@@ -10,6 +11,7 @@ const ReadingRoom = () => {
   const [question, setQuestion] = useState('');
   const [readingStage, setReadingStage] = useState<'selection' | 'drawing' | 'reading'>('selection');
   const [interpretation, setInterpretation] = useState('');
+  const [isGeneratingInterpretation, setIsGeneratingInterpretation] = useState(false);
   
   const handleStartReading = () => {
     if (!selectedSpread || !question.trim()) return;
@@ -23,18 +25,34 @@ const ReadingRoom = () => {
     }, 1500); // Simulate shuffling animation time
   };
   
-  const generateInterpretation = () => {
-    // This is a placeholder. In a full implementation, this would use the Claude API
-    const intro = `Your reading for the question: "${question}"`;
-    const cardInterpretations = drawnCards.map(card => {
-      const orientation = card.isReversed ? 'reversed' : 'upright';
-      const position = card.position?.name || '';
-      return `The ${card.name} (${orientation}) in the ${position} position suggests ${card.meanings[card.isReversed ? 'reversed' : 'upright']}`;
-    }).join('\n\n');
+  const generateInterpretation = async () => {
+    if (!selectedSpread || !drawnCards.length) return;
     
-    const conclusion = "Consider how these cards interact with each other and what advice they offer for your situation.";
+    setIsGeneratingInterpretation(true);
     
-    setInterpretation(`${intro}\n\n${cardInterpretations}\n\n${conclusion}`);
+    try {
+      const interpretation = await generateSpreadInterpretation(
+        question,
+        selectedSpread,
+        drawnCards
+      );
+      setInterpretation(interpretation);
+    } catch (error) {
+      console.error('Error generating interpretation:', error);
+      // Fallback to basic interpretation
+      const intro = `Your reading for the question: "${question}"`;
+      const cardInterpretations = drawnCards.map(card => {
+        const orientation = card.isReversed ? 'reversed' : 'upright';
+        const position = card.position?.name || '';
+        return `The ${card.name} (${orientation}) in the ${position} position suggests ${card.meanings[card.isReversed ? 'reversed' : 'upright']}`;
+      }).join('\n\n');
+      
+      const conclusion = "Consider how these cards interact with each other and what advice they offer for your situation.";
+      
+      setInterpretation(`${intro}\n\n${cardInterpretations}\n\n${conclusion}`);
+    } finally {
+      setIsGeneratingInterpretation(false);
+    }
   };
   
   const handleSaveReading = () => {

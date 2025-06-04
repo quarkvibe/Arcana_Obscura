@@ -4,7 +4,7 @@ import { Toaster } from 'sonner';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Home from './pages/Home';
-import ReadingRoom from './pages/ReadingRoom';
+import EnhancedReadingRoom from './components/EnhancedReadingRoom';
 import Encyclopedia from './pages/Encyclopedia';
 import History from './pages/History';
 import { TarotProvider } from './context/TarotContext';
@@ -22,7 +22,7 @@ function App() {
               <AnimatePresence mode="wait">
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/reading-room" element={<ReadingRoom />} />
+                  <Route path="/reading-room" element={<EnhancedReadingRoom />} />
                   <Route path="/encyclopedia" element={<Encyclopedia />} />
                   <Route path="/history" element={<History />} />
                 </Routes>
